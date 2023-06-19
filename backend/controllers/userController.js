@@ -15,7 +15,7 @@ const authUser = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       _id: user._id,
-      user: user.name,
+      name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -58,7 +58,6 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 
-  res.send("register user");
 });
 
 //@desc     Logout user and clear cookie
