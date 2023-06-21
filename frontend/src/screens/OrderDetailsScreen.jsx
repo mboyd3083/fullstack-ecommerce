@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -7,15 +7,32 @@ import {
   useGetOrderDetailsQuery,
   useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
+import { toast } from "react-toastify";
+
 const OrderDetailsScreen = () => {
   const { id: orderId } = useParams();
 
-  const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId);
+  const {
+    data: order,
+    refetch,
+    isLoading,
+    error,
+  } = useGetOrderDetailsQuery(orderId);
 
   const { userInfo } = useSelector((state) => state.auth);
 
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
+
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order Delivered");
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  };
 
   return isLoading ? (
     <Loader />
@@ -106,7 +123,15 @@ const OrderDetailsScreen = () => {
               </ListGroup.Item>
               {loadingDeliver && <Loader />}
               {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                <ListGroup.Item></ListGroup.Item>
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverOrderHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
               )}
             </ListGroup>
           </Card>
