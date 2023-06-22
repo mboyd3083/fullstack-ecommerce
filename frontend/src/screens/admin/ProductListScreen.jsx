@@ -1,7 +1,6 @@
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
-import { FaEdit, FaTimes, FaPlus, FaTrash } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 // import Paginate from "../../components/Paginate";
@@ -11,9 +10,19 @@ import {
   useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import Paginate from "../../components/Paginate";
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { pageNumber } = useParams();
+  const pageSize = 10
+
+  const { data, isLoading, error, refetch } = useGetProductsQuery({
+    pageNumber,
+    pageSize
+  });
+
+  const { products, page, pages } = data || {};
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
@@ -68,8 +77,8 @@ const ProductListScreen = () => {
           <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>NAME</th>
+                <th>ID</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
                 <th>BRAND</th>
@@ -79,8 +88,8 @@ const ProductListScreen = () => {
             <tbody>
               {products.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
                   <td>{product.name}</td>
+                  <td>{product._id}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
@@ -102,6 +111,7 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
+          <Paginate pages={pages} page={page} baseUrl="/admin/productlist" />
         </>
       )}
     </>
