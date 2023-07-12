@@ -15,13 +15,13 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
     },
     {
       step: step3,
-      link: "/payment",
-      title: "Payment",
+      link: "/placeorder",
+      title: "Confirm Order",
     },
     {
       step: step4,
-      link: "/placeorder",
-      title: "Place Order",
+      link: "/",
+      title: "Payment",
     },
   ];
 
