@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import ProductsScreen from "./screens/ProductsScreen";
 import CartScreen from "./screens/CartScreen";
 import { Provider } from "react-redux";
 import { HelmetProvider } from "react-helmet-async";
@@ -22,8 +23,8 @@ import store from "./store";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ShippingScreen from "./screens/ShippingScreen";
-import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
+import CheckOutScreen from "./screens/CheckOutScreen";
 import OrderScreen from "./screens/OrderScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import OrderListScreen from "./screens/admin/OrderListScreen";
@@ -37,12 +38,14 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
-      <Route path="/search/:keyword" element={<HomeScreen />} />
-      <Route path="/page/:pageNumber" element={<HomeScreen />} />
+      <Route path="/page/:pageNumber" element={<ProductsScreen />} />
       <Route
         path="/search/:keyword/page/:pageNumber"
-        element={<HomeScreen />}
+        element={<ProductsScreen />}
       />
+      <Route path="/products" element={<ProductsScreen />} />
+      <Route path="/products/:category" element={<ProductsScreen />} />
+      <Route path="/search/:keyword" element={<ProductsScreen />} />
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
@@ -50,8 +53,8 @@ const router = createBrowserRouter(
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
-        <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/placeorder" element={<PlaceOrderScreen />} />
+        <Route path="/checkout/:id" element={<CheckOutScreen />} />
         <Route path="/order/:id" element={<OrderScreen />} />
         <Route path="/order/:id/details" element={<OrderDetailsScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
