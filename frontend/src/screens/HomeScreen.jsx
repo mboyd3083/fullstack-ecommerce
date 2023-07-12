@@ -1,27 +1,32 @@
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Image } from "react-bootstrap";
 import Product from "../components/Product";
-import { useGetProductsQuery } from "../slices/productsApiSlice";
+import { useGetLatestProductsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router-dom";
-import Paginate from "../components/Paginate";
 import { Link } from "react-router-dom";
 import ProductCarousel from "../components/ProductCarousel";
 
-const HomeScreen = () => {
-  const { keyword, pageNumber } = useParams();
-  const pageSize = 12;
-  const { data, isLoading, error } = useGetProductsQuery({
-    pageNumber,
-    pageSize,
-    keyword,
-  });
+import { categories, brands } from "../assets/Data";
 
-  const { products, pages, page } = data || {};
+const HomeScreen = () => {
+  const { keyword } = useParams();
+
+  const {
+    data: latestProducts,
+    isLoading,
+    error,
+  } = useGetLatestProductsQuery();
 
   return (
     <>
-    {!keyword ? <ProductCarousel/> : <Link to="/" className="btn btn-light mb-4">Go Back</Link>}
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-light mb-4">
+          Go Back
+        </Link>
+      )}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -30,20 +35,58 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
+          <h1>Popular Categories</h1>
+
+          <div className="category_container">
+            {categories.map((category, index) => (
+              <Link
+                className="category_items"
+                to={`/products/${category.title}`}
+                key={index}
+                style={{ textDecoration: "none" }}
+              >
+                <div className="category_image_bg">
+                  <Image
+                    className="category_image"
+                    src={category.image}
+                    alt={category.title}
+                    fluid
+                  />
+                </div>
+                <h5 className="category_title"> {category.title} </h5>
+              </Link>
+            ))}
+          </div>
+
           <h1>Latest Products</h1>
           <Row>
-            {products.map((product) => (
+            {latestProducts.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
             ))}
           </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            baseUrl="/page"
-            keyword={keyword ? keyword : ""}
-          />
+          <h1 className="home_screen_titles">Top Brands</h1>
+          <Row className="brand_row_container">
+            {brands.map((brand, index) => (
+              <Col
+                key={index}
+                sm={12}
+                md={6}
+                lg={4}
+                xl={3}
+                className="brand_section_container"
+              >
+                <div className="brand_container">
+                  <Image
+                    className="brand_image"
+                    src={brand.image}
+                    alt={brand.title}
+                  />
+                </div>
+              </Col>
+            ))}
+          </Row>
         </>
       )}
     </>
