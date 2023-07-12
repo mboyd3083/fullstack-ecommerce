@@ -21,6 +21,14 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const categoryList = [
+    "Computers & Laptops",
+    "TVs",
+    "Cameras",
+    "Phones & Tablets",
+    "Video Games & Consoles",
+    "Audio",
+  ];
 
   const {
     data: product,
@@ -46,7 +54,7 @@ const ProductEditScreen = () => {
       setCountInStock(product.countInStock);
       setDescription(product.description);
     }
-  }, [product]);
+  }, [product, navigate]);
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -57,9 +65,7 @@ const ProductEditScreen = () => {
       const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
       setImage(res.image);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const submitHandler = async (e) => {
@@ -74,6 +80,7 @@ const ProductEditScreen = () => {
       countInStock,
       description,
     };
+
     const result = await updateProduct(updatedProduct);
     if (result.error) {
       toast.error(result.error);
@@ -153,12 +160,19 @@ const ProductEditScreen = () => {
             </Form.Group>
             <Form.Group controlId="category" className="my-2">
               <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Select
                 placeholder="Enter category"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              >
+                {categoryList.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </Form.Select>
             </Form.Group>
 
             <Form.Group controlId="description">
