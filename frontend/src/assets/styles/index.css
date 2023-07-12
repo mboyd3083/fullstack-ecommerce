@@ -17,10 +17,10 @@ main {
 }
 
 .product-title {
-  height: 2.5em; /* Set a fixed height */
-  overflow: hidden; /* Hide overflow content */
-  text-overflow: ellipsis; /* Add ellipsis for long text */
-  white-space: nowrap; /* Prevent wrapping */
+  height: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
 }
 
 table td,
@@ -50,4 +50,116 @@ table th {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+}
+.home_screen_titles {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.category_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.category_items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.category_image_bg {
+  align-items: center;
+  background: #f4f4f4;
+  border-radius: 50%;
+  display: flex;
+  height: 14vw;
+  justify-content: center;
+  margin: 0 auto 15px;
+  max-height: 145px;
+  max-width: 145px;
+  transition: transform 0.15s, box-shadow 0.15s, color 0.15s;
+  width: 14vw;
+}
+
+.category_items:hover .category_image_bg {
+  border: 2px solid;
+  color: #3498db;
+}
+.category_items:hover {
+  color: #3498db;
+}
+
+.category_image {
+  height: auto;
+  max-height: 70%;
+  max-width: 70%;
+  mix-blend-mode: multiply;
+  width: auto;
+}
+
+.category-filter-title {
+  cursor: pointer;
+}
+
+.category-filter-title:hover {
+  color: #3c4c5d;
+}
+
+.brand_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f4f4f4;
+  width: 250px;
+  height: 250px;
+}
+
+.brand_image {
+  height: auto;
+  max-height: 60%;
+  max-width: 60%;
+  mix-blend-mode: multiply;
+  width: auto;
+}
+.brand_section_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .brand_row_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .category_image_bg {
+    height: 100px;
+    width: 100px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .category_title {
+    display: none;
+  }
+  .category_container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .brand_row_container {
+    display: flex;
+  }
+  .brand_container {
+    width: 90%;
+    height: 100px;
+  }
 }
