@@ -3,7 +3,6 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
-// import Paginate from "../../components/Paginate";
 import {
   useGetProductsQuery,
   useCreateProductMutation,
@@ -15,12 +14,13 @@ import Paginate from "../../components/Paginate";
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
-  const pageSize = 10
+  const pageSize = 10;
 
   const { data, isLoading, error, refetch } = useGetProductsQuery({
     pageNumber,
-    pageSize
+    pageSize,
   });
+
 
   const { products, page, pages } = data || {};
 
@@ -92,6 +92,7 @@ const ProductListScreen = () => {
                   <td>{product._id}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
+
                   <td>{product.brand}</td>
                   <td>
                     <LinkContainer to={`/admin/product/${product._id}/edit`}>
