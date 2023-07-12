@@ -37,7 +37,8 @@ const productSchema = mongoose.Schema(
     },
     category: {
       type: String,
-      required: true,
+    enum: ['Computers & Laptops','TVs','Cameras','Phones & Tablets','Video Games & Consoles', 'Audio'],
+    default:'computers & laptops'
     },
     description: {
       type: String,
