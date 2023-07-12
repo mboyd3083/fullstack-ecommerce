@@ -1,10 +1,12 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
+import Category from "../models/categoryModel.js";
 
 //@desc Fetch all products
 //@route GET /api/products
 //@access Public
 const getProducts = asyncHandler(async (req, res) => {
+  const category = req.query.category;
   const pageSize = req.query.pageSize || 10;
   const page = Number(req.query.pageNumber) || 1;
 
@@ -14,13 +16,20 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const count = await Product.countDocuments({ ...keyword });
 
-  const products = await Product.find({ ...keyword })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1));
+  let products;
+
+  if (category) {
+    products = await Product.find({ ...keyword, category })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+  } else {
+    products = await Product.find({ ...keyword })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+  }
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
-
 //@desc Fetch single product
 //@route GET /api/products/:id
 //@access Public
@@ -45,7 +54,7 @@ const createProduct = asyncHandler(async (req, res) => {
     user: req.user._id,
     image: "/images/sample.jpg",
     brand: "Sample brand",
-    category: "Sample category",
+    category: "Computers & Laptops",
     countInStock: 0,
     numReviews: 0,
     description: "Sample description",
@@ -59,8 +68,15 @@ const createProduct = asyncHandler(async (req, res) => {
 //@route  PUT /api/products/:id
 //@access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    countInStock,
+  } = req.body;
 
   const product = await Product.findById(req.params.id);
 
@@ -143,6 +159,43 @@ const getTopProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+//@desc  Get latest products
+//@route GET /api/products/latest
+//@access Public
+const getLatestProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ createdAt: -1 }).limit(8);
+  res.status(200).json(products);
+});
+
+//@desc   create a product category
+//@route  Post /api/products/category
+//@access Private/Admin
+const createCategory = asyncHandler(async (req, res) => {
+  const { name } = req.body;
+  const category = new Category({ name });
+
+  const createdCategory = await category.save();
+  res.status(201).json(createdCategory);
+});
+
+//@desc   get all product category
+//@route  GET /api/products/category
+//@access Private/Admin
+const getCategories = asyncHandler(async (req, res) => {
+  const categories = await Category.find({});
+  res.status(200).json(categories);
+});
+
+const getCategoryById = asyncHandler(async (req, res) => {
+  const category = await Category.findById(req.params.id);
+  if (category) {
+    return res.json(category);
+  } else {
+    res.status(404);
+    throw new Error("Category not found");
+  }
+});
+
 export {
   getProducts,
   getProductById,
@@ -151,4 +204,8 @@ export {
   deleteProduct,
   createProductReview,
   getTopProducts,
+  createCategory,
+  getCategories,
+  getCategoryById,
+  getLatestProducts,
 };
