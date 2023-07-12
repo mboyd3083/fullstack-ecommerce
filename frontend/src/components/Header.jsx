@@ -5,7 +5,6 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlices";
 import { logout } from "../slices/authSlice";
-import logo from "../assets/logo.png";
 import SearchBox from "./SearchBox";
 
 const Header = () => {
@@ -31,10 +30,7 @@ const Header = () => {
       <Navbar bg="primary" variant="dark" expand="md" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>
-              <img src={logo} alt="ProShop" />
-              ProShop
-            </Navbar.Brand>
+            <Navbar.Brand>ProShop</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
@@ -42,7 +38,7 @@ const Header = () => {
             className="justify-content-end"
           >
             <Nav className="ms-auto">
-            <SearchBox/>
+              <SearchBox />
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <FaShoppingCart /> Cart
@@ -82,15 +78,20 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              {/* {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <LinkContainer to="/admin/orderlist">
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
-              )} */}
             </Nav>
           </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Navbar bg="light" variant="light">
+        <Container>
+          <Nav className="me-auto">
+            <LinkContainer to="/">
+              <Nav.Link>Home</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/products">
+              <Nav.Link>Products</Nav.Link>
+            </LinkContainer>
+          </Nav>
         </Container>
       </Navbar>
     </header>
