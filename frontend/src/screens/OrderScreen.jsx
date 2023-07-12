@@ -1,14 +1,7 @@
 import { Link, useParams } from "react-router-dom";
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Card,
-} from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-// import { useSelector } from "react-redux";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -29,8 +22,6 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-
-  // const { userInfo } = useSelector((state) => state.auth);
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -59,12 +50,6 @@ const OrderScreen = () => {
       }
     }
   }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
-
-  // const onApproveTest = async () => {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
-  //   toast.success("Payment successful");
-  // };
 
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async function (details) {
@@ -153,7 +138,7 @@ const OrderScreen = () => {
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </Col>
                     <Col md={4}>
-                      {item.qty} x {item.price} = ${item.qty * item.price}
+                      ${item.qty * item.price}
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -192,12 +177,6 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      {/* <Button
-                        onClick={onApproveTest}
-                        style={{ marginBottom: "10px" }}
-                      >
-                        Test Pay Order
-                      </Button> */}
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}
