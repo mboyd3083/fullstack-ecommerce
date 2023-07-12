@@ -3,7 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormContainer from "../components/FormContainer";
-import { saveShippingAddress } from "../slices/cartSlice";
+import { saveShippingAddress, savePaymentMethod } from "../slices/cartSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const ShippingScreen = () => {
@@ -17,13 +17,16 @@ const ShippingScreen = () => {
   );
   const [country, setCountry] = useState(shippingAddress?.country || "");
 
+  const paymentMethod = "PayPal";
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate("/payment");
+    dispatch(savePaymentMethod(paymentMethod));
+    navigate("/placeorder");
   };
 
   return (
