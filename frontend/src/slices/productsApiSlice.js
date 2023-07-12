@@ -1,15 +1,16 @@
-import { PRODUCTS_URL, UPLOAD_URL } from "../constants";
+import { PRODUCTS_URL, UPLOAD_URL, CATEGORY_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: ({ keyword, pageNumber, pageSize }) => ({
+      query: ({ keyword, pageNumber, pageSize, category }) => ({
         url: PRODUCTS_URL,
         params: {
           pageNumber,
           pageSize,
           keyword,
+          category,
         },
       }),
       providesTags: ["Products"],
@@ -20,6 +21,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: `${PRODUCTS_URL}/${productId}`,
       }),
       keepUnusedDataFor: 5,
+      invalidatesTags: ["Products"],
     }),
     createProduct: builder.mutation({
       query: () => ({
@@ -63,6 +65,25 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    getLatestProducts: builder.query({
+      query: () => ({
+        url: `${PRODUCTS_URL}/latest`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    getCategories: builder.query({
+      query: () => ({
+        url: `${CATEGORY_URL}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    getCategoryById: builder.query({
+      query: (categoryId) => ({
+        url: `${CATEGORY_URL}/${categoryId}`,
+      }),
+      keepUnusedDataFor: 5,
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -74,5 +95,9 @@ export const {
   useUploadProductImageMutation,
   useDeleteProductMutation,
   useCreateReviewMutation,
-  useGetTopProductsQuery
+  useGetTopProductsQuery,
+  useGetCategoriesQuery,
+  useGetCategoryByIdQuery,
+  useGetLatestProductsQuery,
+  
 } = productsApiSlice;
