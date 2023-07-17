@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { AiOutlineDownCircle, AiOutlineUpCircle } from "react-icons/ai";
 
 const ProductsScreen = () => {
   const categoryList = [
@@ -21,6 +22,7 @@ const ProductsScreen = () => {
   const [category, setCategory] = useState("");
   const [pageNumber, setPageNumber] = useState();
   const [keyword, setKeyword] = useState("");
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false);
 
   const {
     keyword: searchWord,
@@ -64,16 +66,39 @@ const ProductsScreen = () => {
         </Message>
       ) : (
         <>
-          <h1>Products</h1>
-          <Row className="product_row">
-            <Col md={2} style={{ marginTop: "1.2rem" }}>
-              <Form >
+          <h1 className="products_screen_title">Products</h1>
+          <Row className="products_screen_row">
+            <Col style={{ marginTop: "1.2rem" }}>
+              <Form>
                 <Form.Group
                   controlId="category"
                   className="my-2 category_filter_container"
                 >
-                  <h4 style={{ marginBottom: "1rem" }}>Category</h4>
-                  <Row className="category_filter_items">
+                  <div
+                    className="category_header_container"
+                    onClick={() => setShowCategoryFilter(!showCategoryFilter)}
+                  >
+                    <h4
+                      style={{ marginBottom: "1rem" }}
+                      className="products_category_header"
+                    >
+                      Category
+                    </h4>
+                    <h4 className="products_category_icon">
+                      {showCategoryFilter ? (
+                        <AiOutlineDownCircle />
+                      ) : (
+                        <AiOutlineUpCircle />
+                      )}
+                    </h4>
+                  </div>
+                  <Row
+                    className={
+                      showCategoryFilter
+                        ? "category_filter_items"
+                        : "category_filter_items_hidden"
+                    }
+                  >
                     {categoryList.map((category) => (
                       <p
                         className="category-filter-title"
@@ -88,15 +113,22 @@ const ProductsScreen = () => {
                 </Form.Group>
               </Form>
             </Col>
-            <Col md={9}>
+            <Col>
               {data.products.length === 0 ? (
                 <Message variant="">No products</Message>
               ) : (
-                <>
+                <div className="product_items_container">
                   <Row>
                     {products.map((product) => (
-                      <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                        <Product product={product} />
+                      <Col
+                        key={product._id}
+                        xs={12}
+                        md={6}
+                        lg={4}
+                        xl={3}
+                        className="product_col"
+                      >
+                        <Product product={product} screen="products" />
                       </Col>
                     ))}
                   </Row>
@@ -107,7 +139,7 @@ const ProductsScreen = () => {
                     baseUrl="/page"
                     keyword={keyword ? keyword : ""}
                   />
-                </>
+                </div>
               )}
             </Col>
           </Row>

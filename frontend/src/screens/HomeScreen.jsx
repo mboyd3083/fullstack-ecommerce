@@ -35,7 +35,7 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
-          <h1>Popular Categories</h1>
+          <h1 className="home_screen_title">Popular Categories</h1>
 
           <div className="category_container">
             {categories.map((category, index) => (
@@ -58,15 +58,22 @@ const HomeScreen = () => {
             ))}
           </div>
 
-          <h1>Latest Products</h1>
-          <Row>
+          <h1 className="home_screen_title">Latest Products</h1>
+          <Row className="product_row">
             {latestProducts.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
+              <Col
+                key={product._id}
+                sm={12}
+                md={6}
+                lg={4}
+                xl={3}
+                className="product_col"
+              >
+                <Product product={product} screen="home" />
               </Col>
             ))}
           </Row>
-          <h1 className="home_screen_titles">Top Brands</h1>
+          <h1 className="home_screen_title">Top Brands</h1>
           <Row className="brand_row_container">
             {brands.map((brand, index) => (
               <Col
