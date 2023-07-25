@@ -14,20 +14,21 @@ const getProducts = asyncHandler(async (req, res) => {
     ? { name: { $regex: req.query.keyword, $options: "i" } }
     : {};
 
-  const count = await Product.countDocuments({ ...keyword });
-
+  let count;
   let products;
 
   if (category) {
     products = await Product.find({ ...keyword, category })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
+    count = await Product.countDocuments({ ...keyword, category });
   } else {
     products = await Product.find({ ...keyword })
       .limit(pageSize)
       .skip(pageSize * (page - 1));
+    count = await Product.countDocuments({ ...keyword });
   }
-
+  
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 //@desc Fetch single product
@@ -68,15 +69,8 @@ const createProduct = asyncHandler(async (req, res) => {
 //@route  PUT /api/products/:id
 //@access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body;
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body;
 
   const product = await Product.findById(req.params.id);
 
